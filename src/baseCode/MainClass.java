@@ -1,4 +1,4 @@
-package main;
+package baseCode;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -11,12 +11,14 @@ import javax.swing.event.*;
 
 public class MainClass extends JFrame implements ActionListener
 {
-	public JButton next, previous, codeTab, resultsTab;
+	public JButton next, previous, saveButton, outputButton;
 	public JTextArea infoText, codeText;
 	public JPanel resultPanel, horDivider, vertDivider;
 	public int deelNum = 1;
-	public boolean seeCode = true;
-	
+	public boolean loadedFile = true;
+	readFile rf = new readFile();
+	File file = new File(""), infoFile = new File("");
+	String fileString = "", infoString = "";
 	
 	public static void main(String[] args)
 	{
@@ -54,13 +56,15 @@ public class MainClass extends JFrame implements ActionListener
 		window.add(vertDivider);	
 		
 		infoText = new JTextArea();
-		infoText.setBounds(20, 120, 380, 625);
+		JScrollPane infoScroll = new JScrollPane(infoText);
+		infoScroll.setBounds(20, 120, 380, 625);
 		infoText.setEditable(false);
-		window.add(infoText);
+		window.add(infoScroll);
 		
 		codeText = new JTextArea();
-		codeText.setBounds(445,120,520,625);
-		window.add(codeText);
+		JScrollPane codeScroll = new JScrollPane(codeText);
+		codeScroll.setBounds(445,120,520,625);
+		window.add(codeScroll);
 		
 		resultPanel = new JPanel();
 		resultPanel.setBounds(445,120,520,625);
@@ -68,73 +72,30 @@ public class MainClass extends JFrame implements ActionListener
 		resultPanel.setVisible(false);
 		window.add(resultPanel);
 		
-		codeTab = new JButton("Code");
-		codeTab.setBounds(560, 40, 90, 60);
-		window.add(codeTab);
-		codeTab.addActionListener(this);
+		saveButton = new JButton("Save code");
+		saveButton.setBounds(540, 40, 110, 60);
+		window.add(saveButton);
+		saveButton.addActionListener(this);
 		
-		resultsTab = new JButton("Results");
-		resultsTab.setBounds(660, 40, 90, 60);
-		window.add(resultsTab);
-		resultsTab.addActionListener(this);
+		outputButton = new JButton("Output");
+		outputButton.setBounds(660, 40, 90, 60);
+		window.add(outputButton);
+		outputButton.addActionListener(this);
 		drawStuff();
 	}
 	
 	public void drawStuff()
 	{
-		codeText.setText("");
-		if(seeCode)
-		{
-			codeText.setVisible(true);
-			resultPanel.setVisible(false);
-		}
-		else
-		{
-			codeText.setVisible(false);
-			resultPanel.setVisible(true);
-		}
-		switch(deelNum)
-		{
-			case 1:
-				infoText.setText("1");
-				codeText.setText("1");
-				break;
-				
-			case 2:
-				infoText.setText("2");
-				codeText.setText("2");
-				break;
-
-			case 3:
-				infoText.setText("3");
-				codeText.setText("3");
-				break;
-
-			case 4:
-				infoText.setText("4");
-				codeText.setText("4");
-				break;
-
-			case 5:
-				infoText.setText("5");
-				codeText.setText("5");
-				break;
-
-			case 6:
-				infoText.setText("6");
-				codeText.setText("6");
-				break;
-
-			case 7:
-				infoText.setText("7");
-				codeText.setText("7");
-				break;
-
-			case 8:
-				infoText.setText("8");
-				codeText.setText("8");
-				break;
-		}
+		fileString = "src\\voorbeeldDelen\\Deel"+deelNum+".java";
+		infoString = "src\\infoTexts\\Info"+deelNum+".txt";
+		file = new File(fileString);
+		infoFile = new File(infoString);
+		String codeContent = rf.getContents(file);
+		String infoContent = rf.getContents(infoFile);
+	    if(loadedFile)
+	    	System.out.println("Got contents: Deel " + deelNum + "!\n");	    	
+		codeText.setText(codeContent);
+		infoText.setText(infoContent);
 	}
 	
 	public void actionPerformed(ActionEvent e)
@@ -147,6 +108,7 @@ public class MainClass extends JFrame implements ActionListener
 				deelNum = 1;
 			else
 				deelNum++;
+			loadedFile = true;
 		}
 		if(source == previous)
 		{
@@ -154,14 +116,25 @@ public class MainClass extends JFrame implements ActionListener
 				deelNum = 8;
 			else
 				deelNum--;
+			loadedFile = true;
 		}
-		if(source == codeTab)
+
+		if(source == saveButton)
 		{
-			seeCode = true;
+			try
+			{
+				loadedFile = false;
+				System.out.println("Saved content:\n");
+				rf.saveFile(file,codeText.getText());
+			}
+			catch(Exception err)
+			{
+				System.out.println("Save error!");
+			}
 		}
-		if(source == resultsTab)
+		if(source == outputButton)
 		{
-			seeCode = false;
+			//run applet code here
 		}		
 		drawStuff();
 	}

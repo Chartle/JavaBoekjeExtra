@@ -1,0 +1,38 @@
+	Hoofdstuk 1:
+
+Deze applet is een van de basis applets, hierin wordt een string 
+getekend met als waarde "Hallo", op de positie 100, 20. Ook wordt
+er een lijn getekent van positie 100, 30 naar positie 200, 30.
+
+Uitleg bij elke regel:
+
+
+	package voorbeeldDelen;
+
+Een package in java is een folder. Hiermee worden java files vaak 
+gesorteerd op inhoud of hoe ze werken.
+
+
+	import java.applet.*;
+	import java.awt.*;
+
+Hier worden de nodige libraries geimporteerd voor gebruik in het 
+programma. 
+
+
+	public class Deel1 extends Applet 
+
+Hier begint de code van de class.
+
+
+	public void paint(Graphics g)
+
+Hier wordt de paint methode van de applet import aangeroepen. 
+(Graphics g) zorgt ervoor dat de draw methodes van de awt import
+aangeroepen kunnen worden. 
+
+
+	g.drawString("Hallo", 100, 20);
+	g.drawLine(100, 30, 200, 30);
+
+Hier worden de "Hallo" string en de lijn getekend.

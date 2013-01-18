@@ -1,0 +1,18 @@
+	Hoofdstuk 7:
+
+samenvatting applet
+
+Uitleg bij elke regel:
+
+
+	regel 1 
+	
+uitleg
+
+
+	regel 2
+
+uitleg
+
+
+enz
