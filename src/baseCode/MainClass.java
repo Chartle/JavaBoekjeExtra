@@ -3,19 +3,17 @@ package baseCode;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
-import java.nio.file.*;
-import java.nio.file.Path.*;
 import voorbeeldDelen.*;
 import javax.swing.*;
 import javax.swing.event.*;
 
 public class MainClass extends JFrame implements ActionListener
 {
-	public JButton next, previous, saveButton, outputButton;
+	public JButton next, previous, saveButton, outputButton, viewButton;
 	public JTextArea infoText, codeText;
 	public JPanel resultPanel, horDivider, vertDivider;
 	public int deelNum = 1;
-	public boolean loadedFile = true;
+	public boolean loadedFile = true, showingCode = true;
 	readFile rf = new readFile();
 	File file = new File(""), infoFile = new File("");
 	String fileString = "", infoString = "";
@@ -25,18 +23,19 @@ public class MainClass extends JFrame implements ActionListener
 		MainClass demo = new MainClass();
 		demo.setSize(1000,800);
 		demo.setLayout(null);
-		demo.createGUI();
+		demo.createCodeGUI();
+		demo.createSamenvGUI();
 		demo.setVisible(true);
 	}
 	
-	public void createGUI()
+	public void createCodeGUI()
 	{
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		Container window = getContentPane();
 		window.setLayout(null);
 		
 		next = new JButton(">");
-		next.setBounds(885, -1, 100, 101);
+		next.setBounds(893, -1, 100, 101);
 		window.add(next);
 		next.addActionListener(this);
 
@@ -66,12 +65,6 @@ public class MainClass extends JFrame implements ActionListener
 		codeScroll.setBounds(445,120,520,625);
 		window.add(codeScroll);
 		
-		resultPanel = new JPanel();
-		resultPanel.setBounds(445,120,520,625);
-		resultPanel.setBackground(Color.WHITE);
-		resultPanel.setVisible(false);
-		window.add(resultPanel);
-		
 		saveButton = new JButton("Save code");
 		saveButton.setBounds(540, 40, 110, 60);
 		window.add(saveButton);
@@ -81,7 +74,51 @@ public class MainClass extends JFrame implements ActionListener
 		outputButton.setBounds(660, 40, 90, 60);
 		window.add(outputButton);
 		outputButton.addActionListener(this);
+		
+		viewButton = new JButton("Code en uitleg");
+		viewButton.setBounds(400,40,130,60);
+		window.add(viewButton);
+		viewButton.addActionListener(this);
+		
 		drawStuff();
+	}
+
+	public void createSamenvGUI()
+	{
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		Container window = getContentPane();
+		window.setLayout(null);
+		
+		//stoof voor samenvattingdinges hier;
+		drawStuff();
+	}
+	
+	public void visibilize(int view)
+	{
+		switch(view)
+		{
+			case 1:
+				next.setVisible(false);
+				previous.setVisible(false);
+				infoText.setVisible(false);
+				codeText.setVisible(false);
+				saveButton.setVisible(false);
+				outputButton.setVisible(false);
+				showingCode = false;
+				viewButton.setText("Code en uitleg");
+				break;
+			
+			case 2: 
+				next.setVisible(true);
+				previous.setVisible(true);
+				infoText.setVisible(true);
+				codeText.setVisible(true);
+				saveButton.setVisible(true);
+				outputButton.setVisible(true);
+				showingCode = true;
+				viewButton.setText("Samenvatting");
+				break;
+		}
 	}
 	
 	public void drawStuff()
@@ -101,6 +138,15 @@ public class MainClass extends JFrame implements ActionListener
 	public void actionPerformed(ActionEvent e)
 	{
 		Object source = e.getSource();
+		
+		if(source == viewButton)
+		{
+			if(showingCode)
+				visibilize(1);
+
+			else if(showingCode == false)
+				visibilize(2);
+		}
 		
 		if(source == next)
 		{
